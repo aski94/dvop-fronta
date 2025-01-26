@@ -1,0 +1,298 @@
+openapi: 3.0.3
+info:
+  title: Queue Management API
+  description: REST API for managing orders and locations in a queue system.
+  version: 1.0.0
+paths:
+  /locations/{locationId}/orders:
+    get:
+      summary: Get all orders for a location
+      description: Retrieve all orders associated with a specific location.
+      tags:
+        - order
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Location identifier
+      responses:
+        '200':
+          description: List of orders for the location
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/order'
+        '400':
+          description: Invalid location ID
+        '404':
+          description: Location not found
+        '500':
+          description: Internal server error
+  /locations:
+    post:
+      summary: Create a new location
+      description: Add a new location with specific details.
+      tags:
+        - location
+      requestBody:
+        description: Details of the new location
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/location'
+      responses:
+        '201':
+          description: New location created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/location'
+        '400':
+          description: Invalid location data
+        '500':
+          description: Internal server error
+    get:
+      summary: Get all locations
+      description: Get a list of all locations.
+      tags:
+        - location
+      responses:
+        '200':
+          description: List of locations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/location'
+        '500':
+          description: Internal server error
+  /locations/{locationId}:
+    get:
+      summary: Get a location by ID
+      description: Get details of a location by its ID.
+      tags:
+        - location
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Location identifier
+      responses:
+        '200':
+          description: Location details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/location'
+        '400':
+          description: Invalid location ID
+        '404':
+          description: Location not found
+        '500':
+          description: Internal server error
+    put:
+      summary: Update a location
+      description: Modify an existing location.
+      tags:
+        - location
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Location identifier
+      requestBody:
+        description: Updated location details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/location'
+      responses:
+        '200':
+          description: Location updated
+        '400':
+          description: Invalid location data
+        '404':
+          description: Location not found
+        '500':
+          description: Internal server error
+    delete:
+      summary: Delete a location
+      description: Remove a location by its ID.
+      tags:
+        - location
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Location identifier
+      responses:
+        '204':
+          description: Location deleted
+        '400':
+          description: Invalid location ID
+        '404':
+          description: Location not found
+        '500':
+          description: Internal server error
+  /orders:
+    post:
+      summary: Create a new order
+      description: Add a new order for a location.
+      tags:
+        - order
+      requestBody:
+        description: Details of the new order
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/order'
+      responses:
+        '201':
+          description: New order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order'
+        '400':
+          description: Invalid order data
+        '404':
+          description: Location not found
+        '500':
+          description: Internal server error
+    get:
+      summary: Get all orders
+      description: Retrieve a list of all orders.
+      tags:
+        - order
+      responses:
+        '200':
+          description: List of all orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/order'
+        '500':
+          description: Internal server error
+  /orders/{orderId}:
+    get:
+      summary: Get a single order
+      description: Get details of a specific order.
+      tags:
+        - order
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Order identifier
+      responses:
+        '200':
+          description: Order details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order'
+        '400':
+          description: Invalid order ID
+        '404':
+          description: Order not found
+        '500':
+          description: Internal server error
+    put:
+      summary: Update an order
+      description: Modify an existing order.
+      tags:
+        - order
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Order identifier
+      requestBody:
+        description: Updated order details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/order'
+      responses:
+        '200':
+          description: Order updated
+        '400':
+          description: Invalid order data
+        '404':
+          description: Order not found
+        '500':
+          description: Internal server error
+    delete:
+      summary: Delete an order
+      description: Remove an order by its ID.
+      tags:
+        - order
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Order identifier
+      responses:
+        '204':
+          description: Order deleted
+        '400':
+          description: Invalid order ID
+        '404':
+          description: Order not found
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    location:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required:
+        - id
+        - name
+    order:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        status:
+          type: string
+        locationId:
+          type: integer
+      required:
+        - id
+        - description
+        - status
+        - locationId
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/ALESAUBR/queue/1.0.0
